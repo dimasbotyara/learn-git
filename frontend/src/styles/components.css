@@ -1171,7 +1171,18 @@
 
 .lesson-steps {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
+}
+
+/* Широкие блоки кода не должны растягивать страницу на мобиле. */
+.lesson-steps > * {
+  min-width: 0;
+}
+
+.md pre,
+.md .code {
+  max-width: 100%;
 }
 
 .sidebar-wrap {
@@ -1303,4 +1314,219 @@ html[data-effects='off'] .quiz__option--wrong {
 
 h3 code {
   font-size: 0.85em;
+}
+
+/* --- терминал ----------------------------------------------------------- */
+
+.terminal {
+  margin: var(--space-4) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--term-bg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.terminal__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-3);
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--bg-elev) 70%, transparent);
+}
+
+.terminal__head-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.terminal__body {
+  height: 320px;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono), var(--font-emoji);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--term-fg);
+  cursor: text;
+  overscroll-behavior: contain;
+}
+
+.terminal--auto .terminal__body {
+  height: auto;
+  min-height: 180px;
+  max-height: 420px;
+}
+
+.terminal__body--sm { font-size: 12px; }
+.terminal__body--lg { font-size: 15px; }
+
+@media (max-width: 640px) {
+  .terminal__body {
+    height: 280px;
+    font-size: 12.5px;
+    padding: var(--space-3);
+  }
+}
+
+.term__line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-height: 1.4em;
+}
+
+.term__line--muted { color: var(--fg-faint); }
+.term__line--ok { color: var(--green); }
+.term__line--err { color: var(--red); }
+.term__line--accent { color: var(--accent); }
+.term__line--input { color: var(--term-fg); }
+
+.term__prompt {
+  color: var(--accent);
+  font-weight: 600;
+  user-select: none;
+}
+
+.term__line--input {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+/* Длинная команда переносится целиком под промпт, а не рвётся по буквам. */
+.term__cmd {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.term__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--term-fg);
+  font: inherit;
+  padding: 0;
+  caret-color: var(--accent);
+}
+
+.terminal__hints {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border-soft);
+  font-size: var(--text-xs);
+  background: color-mix(in srgb, var(--bg-elev) 40%, transparent);
+}
+
+.terminal__hint {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--border);
+  color: var(--fg-muted);
+}
+
+.terminal__quick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--bg-elev) 25%, transparent);
+}
+
+.terminal__quick .chip {
+  font-family: var(--font-mono);
+  min-height: 28px;
+}
+
+.terminal__nudge {
+  color: var(--yellow);
+  font-size: var(--text-xs);
+}
+
+/* --- блок задания ------------------------------------------------------- */
+
+.task {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg-soft));
+  margin-bottom: var(--space-3);
+}
+
+.task--done {
+  border-left-color: var(--green);
+  background: color-mix(in srgb, var(--green) 8%, var(--bg-soft));
+}
+
+.task__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.task--done .task__label { color: var(--green); }
+
+.task__text {
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.task__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.lesson-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-top: var(--space-5);
+}
+
+/* --- мобильный терминал ------------------------------------------------ */
+
+@media (max-width: 640px) {
+  .terminal__quick {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .terminal__quick .chip {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+  }
+
+  .terminal__hints {
+    gap: 4px;
+  }
+
+  .terminal__hint {
+    font-size: 0.76rem;
+  }
+
+  .terminal__body {
+    padding: var(--space-3) var(--space-3);
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
 }

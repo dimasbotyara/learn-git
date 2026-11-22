@@ -79,6 +79,7 @@ const fixtures = {
   'lessons/01-basics/status-and-config?lang=ru': read('lesson-status-ru.json'),
   'lessons/01-basics/status-and-config?lang=en': read('lesson-status-en.json'),
   'lessons/02-daily/add-and-commit?lang=ru': read('lesson-missing-ru.json'),
+  'lessons/03-branching/branches?lang=ru': read('lesson-branches-ru.json'),
 }
 
 globalThis.fetch = async (url) => {
@@ -182,7 +183,47 @@ const search = document.querySelector('.search input')
 setValue.call(search, 'merge')
 search.dispatchEvent(new window.Event('input', { bubbles: true }))
 await sleep(120)
-check('шпаргалка: поиск фильтрует', count('.cheat-row') === 1, `${count('.cheat-row')} строка`)
+const allRows = count('.cheat-row')
+check(
+  'шпаргалка: поиск фильтрует',
+  allRows > 0 && allRows < 28 && [...document.querySelectorAll('.cheat-row')].every((row) => row.textContent.toLowerCase().includes('merge')),
+  `${allRows} строк`,
+)
+
+/* --- терминал-тренажёр ------------------------------------------------- */
+
+rerender('/lesson/03-branching/branches')
+await sleep(350)
+check('урок с терминалом: задание показано', count('.task') === 1)
+check('терминал отрендерен', count('.terminal') === 1 && count('.term__input') === 1)
+check('терминал: приглашение и приветствие', text().includes('Виртуальный репозиторий'))
+check('терминал: чипы «Попробуй»', count('.terminal__quick .chip') >= 3)
+
+const runCmd = async (command) => {
+  const input = document.querySelector('.term__input')
+  setValue.call(input, command)
+  input.dispatchEvent(new window.Event('input', { bubbles: true }))
+  await sleep(30)
+  input.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+  await sleep(120)
+}
+
+await runCmd('help')
+check('терминал: help показывает команды', text().includes('git init') && text().includes('создать репозиторий'))
+check('терминал: help показывает подсказки к заданию', text().includes('Подсказки к этому заданию'))
+
+await runCmd('git status')
+check('терминал: git status отвечает как настоящий', text().includes('On branch main'))
+await runCmd('git switch -c feature/notes')
+await runCmd('echo "идеи" > ideas.txt')
+await runCmd('git add .')
+await runCmd('git commit -m "feat: notes"')
+await runCmd('git switch main')
+await sleep(200)
+check('терминал: коммит виден в логе', (await runCmd('git log --oneline'), text().includes('feat: notes')))
+check('терминал: задание засчитано', count('.task--done') === 1)
+check('терминал: плашка «решено»', text().includes('решено') || text().includes('Задание выполнено'))
+check('терминал: подсказки сворачиваются', count('.task__actions button') === 1)
 
 rerender('/nope')
 await sleep(200)

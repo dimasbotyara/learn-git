@@ -58,14 +58,16 @@ A little course site that answers the questions every beginner stumbles over:
 | 🎉 **Delightful effects** | Confetti, toasts and micro-animations that respect `prefers-reduced-motion` and can be turned off. |
 | 📱 **Mobile first** | Drawer navigation, sticky lesson bar, 44px touch targets, safe-area padding for iOS. |
 | 📴 **Works offline** | Inter, JetBrains Mono, Noto Color Emoji, `highlight.js` and `canvas-confetti` are installed from npm and bundled — zero requests to a CDN at runtime. |
-| 🧪 **Tested** | 10 pytest API tests + 28 frontend checks in jsdom (no Chromium needed). |
+| 🖥️ **Terminal trainer** | A real fake Git right inside the lesson: `init`, `add`, `commit`, `branch`, `merge` with conflicts, `stash`, `reset`, `revert`, `push`. Output looks like the real thing, and you can break the working tree freely — one click on Reset brings it back. |
+| ✅ **Checked exercises** | Every lesson has a quiz with explanations, a checklist and hands-on practice: the trainer inspects the repository state and lights up "solved" once it's done. |
+| 🧪 **Tested** | 12 pytest API tests + 39 frontend checks in jsdom (no Chromium needed). |
 
 ## 🖼️ Screenshots
 
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/en-home.png" alt="Home page"><br><sub><b>Home</b> — course outline and progress</sub></td>
-    <td width="50%"><img src="docs/screenshots/en-lesson.png" alt="Lesson page"><br><sub><b>Lesson</b> — theory, highlighted code, callouts</sub></td>
+    <td width="50%"><img src="docs/screenshots/en-terminal.png" alt="Terminal trainer"><br><sub><b>Trainer</b> — type Git commands, get real output</sub></td>
   </tr>
   <tr>
     <td width="50%"><img src="docs/screenshots/en-settings.png" alt="Settings panel"><br><sub><b>Settings</b> — 10 themes, language, text size, effects</sub></td>
@@ -77,20 +79,37 @@ A little course site that answers the questions every beginner stumbles over:
   <img src="docs/screenshots/ru-mobile.png" alt="Mobile layout" width="30%">
   &nbsp;
   <img src="docs/screenshots/ru-mobile-lesson.png" alt="Mobile lesson view" width="30%">
+  <img src="docs/screenshots/ru-mobile-terminal.png" alt="Trainer on mobile" width="30%">
 </p>
 
 ## 📚 Course outline
 
-| | Module | What's inside |
+| | Module | Lessons |
 |---|---|---|
-| 📚 | **1. Basics** | Git vs GitHub, `git init`, `git clone`, `git status`, first-time `git config` |
-| 🛠️ | **2. Daily routine** | The staging area, `git add`, `git commit`, meaningful messages, `push` / `pull` |
-| 🌿 | **3. Branching and merging** | Why branches exist, `git branch`, `switch`, `merge`, and a real merge conflict |
-| 🚀 | **4. Advanced (but essential)** | `.gitignore` for secrets, `git stash`, `reset --soft/--mixed/--hard`, `revert` |
-| 🤝 | **5. GitHub and teamwork** | SSH keys, forks, Pull Requests, code review |
+| 📚 | **1. Basics** | 1. What Git is and how it differs from GitHub · 2. Your first repository: `init` and `clone` · 3. `git status` and first-time `config` |
+| 🛠️ | **2. Daily routine** | 4. `git add` and `git commit` · 5. `git push` and `git pull` |
+| 🌿 | **3. Branching and merging** | 6. Branches: `branch` and `switch` · 7. Merging and a real merge conflict |
+| 🚀 | **4. Advanced (but essential)** | 8. `.gitignore` for secrets · 9. `stash`, `reset` and `revert` |
+| 🤝 | **5. GitHub and teamwork** | 10. SSH keys · 11. Pull Requests and code review |
 
-Module 1 is fully written in both languages; the rest are scaffolded and land next
-(see [`docs/PLAN.md`](docs/PLAN.md) for the roadmap).
+Each lesson has theory plus a mix of a quiz with explanations, a habits checklist and
+hands-on terminal practice (12 exercises across the course, from `git init` to pushing
+a branch and opening a PR).
+
+**All 11 lessons are written in both languages** — 5 modules, ~134 minutes of
+reading, 28 cheatsheet commands and 12 trainer exercises. Status and roadmap live in
+[`docs/PLAN.md`](docs/PLAN.md).
+
+### 🖥️ Terminal trainer
+
+Each lesson can contain a window where you type real Git commands. Under it, `help`
+prints the command list and — **only in some lessons** — a few small hints for that
+specific task. Lessons without hints say so honestly and keep the general list.
+
+A task is checked against the state of the virtual repository: "at least one commit",
+"`notes.txt` is in history", "no conflicts left", "the push reached `origin`". So you
+can solve it your own way — the trainer cares about the result, not the exact command.
+The Reset button rewinds everything to the start of the task.
 
 ## 🚀 Quick start
 
@@ -138,6 +157,9 @@ frontend/src/
   i18n/{ru,en}.js       # UI dictionaries
   progress.jsx          # localStorage progress
   pages/                # Home, Lesson, Cheatsheet, Sandbox
+  sim/git.js            # virtual git: state, commands, conflicts
+  sim/checks.js         # task checks declared in course.yaml
+  sim/Terminal.jsx      # the trainer window
 scripts/
   start.sh              # build + run in one command
   smoke-router.mjs      # 28 frontend checks in jsdom
@@ -171,6 +193,9 @@ cd backend && ../.venv/bin/python -m pytest -q
 
 # frontend (needs Flask running — it dumps API fixtures first)
 cd frontend && npm run smoke
+
+# every trainer exercise in course.yaml: solvable, and not solvable by doing nothing
+cd frontend && npm run check:tasks
 ```
 
 ## 🖌️ Regenerating the banner

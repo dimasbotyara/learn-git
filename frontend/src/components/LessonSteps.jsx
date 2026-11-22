@@ -5,6 +5,7 @@ import { useEffects } from '../effects'
 import { Link } from 'react-router-dom'
 import { Markdown } from './Markdown'
 import { InlineCode } from './InlineCode'
+import { Terminal } from '../sim/Terminal'
 import { IconCheck } from './Icons'
 
 export function LessonSteps({ steps, onComplete }) {
@@ -177,23 +178,48 @@ export function ChecklistStep({ step, onComplete, t }) {
 }
 
 function TerminalStep({ step, onComplete, t }) {
-  const { toast } = useEffects()
+  const [solved, setSolved] = useState(false)
+
   return (
-    <div className="card" style={{ marginTop: 'var(--space-4)' }}>
-      <h3 style={{ marginTop: 0 }}>{step.title || 'Terminal'}</h3>
-      <p className="muted">{step.task}</p>
-      <div className="banner">
-        <span aria-hidden="true">🚧</span>
-        <span>
-          {t('common.soon')}: интерактивный тренажёр для этого задания появится на следующем этапе. Пока — попробуй
-          команды в{' '}
-          <Link to="/sandbox">песочнице</Link>
-          .
-        </span>
+    <div style={{ marginTop: 'var(--space-4)' }}>
+      <div className={`task ${solved ? 'task--done' : ''}`}>
+        <span className="task__label">{solved ? t('terminal.taskDone') : t('terminal.task')}</span>
+        <p className="task__text">
+          <InlineCode text={step.task} />
+        </p>
+        {step.hints?.length > 0 && <Hints hints={step.hints} t={t} />}
       </div>
-      <button type="button" className="btn btn--sm" onClick={() => { onComplete?.(); toast(t('common.done'), { tone: 'success' }) }}>
-        {t('common.done')}
+      <Terminal
+        task={step.task}
+        hints={step.hints || []}
+        check={step.check}
+        setup={step.setup || []}
+        label={step.id || '~/project'}
+        onSolved={() => {
+          setSolved(true)
+          onComplete?.()
+        }}
+      />
+    </div>
+  )
+}
+
+function Hints({ hints, t }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="task__actions">
+      <button type="button" className="btn btn--sm" onClick={() => setOpen((value) => !value)}>
+        {open ? t('terminal.hideHint') : t('terminal.showHint')}
       </button>
+      {open && (
+        <ul style={{ margin: 0, paddingLeft: '1.1em', fontSize: 'var(--text-sm)' }}>
+          {hints.map((hint) => (
+            <li key={hint} className="muted">
+              {hint}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

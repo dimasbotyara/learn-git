@@ -1,5 +1,5 @@
-# Структура курса. Каждый урок — отдельный markdown-файл рядом с локализованными версиями.
-# Шаг урока может быть: theory | quiz | terminal | checklist | conflict
+# Структура курса. Урок = один markdown-файл (+ .en.md) и список шагов.
+# Шаг: theory | quiz | checklist | terminal | conflict
 slug: learn-git
 version: 1
 default_locale: ru
@@ -27,6 +27,49 @@ modules:
         summary:
           ru: "Главная путаница новичков за пять минут."
           en: "The most common beginner mix-up, cleared up in five minutes."
+        steps:
+          - type: theory
+            file: what-is-git.md
+          - type: quiz
+            id: git-vs-github-quiz
+            question:
+              ru: "Можно ли сделать коммит без интернета?"
+              en: "Can you make a commit without internet?"
+            options:
+              - id: a
+                text:
+                  ru: "Да — Git работает локально, сеть нужна только для push/pull"
+                  en: "Yes — Git works locally, the network is only needed for push/pull"
+                correct: true
+                explain:
+                  ru: "Именно так. Поэтому Git удобен в поезде и самолёте: коммиты делаются офлайн."
+                  en: "Exactly. That's why Git is great on trains and planes: commits work offline."
+              - id: b
+                text:
+                  ru: "Нет, коммит сразу уходит на GitHub"
+                  en: "No, a commit goes straight to GitHub"
+                explain:
+                  ru: "Это делает `git push`, а не `git commit`. GitHub вообще не обязателен для работы с Git."
+                  en: "That's `git push`, not `git commit`. GitHub isn't even required to use Git."
+              - id: c
+                text:
+                  ru: "Только если заранее скачать репозиторий с GitHub"
+                  en: "Only if you downloaded the repository from GitHub first"
+                explain:
+                  ru: "Скачивание — это `clone`. А `init` создаёт репозиторий с нуля, тоже без сети."
+                  en: "Downloading is `clone`. And `init` creates a repository from scratch, also offline."
+          - type: checklist
+            id: git-basics-check
+            title:
+              ru: "Проверь, что понял разницу"
+              en: "Check that you got the difference"
+            items:
+              - ru: "Git — программа на моём компьютере, GitHub — сайт-хостинг"
+                en: "Git is a program on my computer, GitHub is a hosting website"
+              - ru: "Коммиты делаются без интернета"
+                en: "Commits work without internet"
+              - ru: "GitHub — не единственный хостинг (есть GitLab, Bitbucket)"
+                en: "GitHub isn't the only host (GitLab and Bitbucket exist)"
       - slug: first-repo
         minutes: 10
         title:
@@ -35,8 +78,39 @@ modules:
         summary:
           ru: "Создаём репозиторий с нуля и копируем чужой."
           en: "Create a repository from scratch and copy someone else's."
+        steps:
+          - type: theory
+            file: first-repo.md
+          - type: terminal
+            id: init-practice
+            title:
+              ru: "Создай свой первый репозиторий"
+              en: "Create your first repository"
+            task:
+              ru: "Создай репозиторий командой `git init` и посмотри, что скажет `git status`."
+              en: "Create a repository with `git init` and see what `git status` says."
+            check:
+              all:
+                - initialized: true
+                - ranCommands:
+                    - "git init"
+                    - "git status"
+          - type: terminal
+            id: clone-practice
+            title:
+              ru: "Склонируй чужой проект"
+              en: "Clone someone else's project"
+            task:
+              ru: "Склонируй репозиторий по адресу `https://github.com/user/project.git` и проверь, что появились коммиты: `git log --oneline`."
+              en: "Clone the repository at `https://github.com/user/project.git` and check that commits arrived: `git log --oneline`."
+            check:
+              all:
+                - commits: ">=2"
+                - ranCommands:
+                    - "git clone"
+                    - "git log"
       - slug: status-and-config
-        minutes: 9
+        minutes: 12
         title:
           ru: "git status и первичная настройка"
           en: "git status and first-time setup"
@@ -74,18 +148,21 @@ modules:
                 explain:
                   ru: "Так бывает, когда всё уже закоммичено. Новый файл Git бы заметил."
                   en: "That happens when everything is committed. Git would still notice a new file."
-          - type: checklist
-            id: setup-check
+          - type: terminal
+            id: status-practice
             title:
-              ru: "Настрой себя один раз — и навсегда"
-              en: "Set yourself up once — for good"
-            items:
-              - ru: "Я выполнил `git config --global user.name \"Имя Фамилия\"`"
-                en: "I ran `git config --global user.name \"Name Surname\"`"
-              - ru: "Я выполнил `git config --global user.email \"me@example.com\"`"
-                en: "I ran `git config --global user.email \"me@example.com\"`"
-              - ru: "Я проверил результат командой `git config --list`"
-                en: "I checked the result with `git config --list`"
+              ru: "Поиграй с состояниями файла"
+              en: "Play with the file states"
+            task:
+              ru: "Создай файл `notes.txt` через `echo \"привет\" > notes.txt`, посмотри `git status`, затем добавь его в staging (`git add`) — и снова `git status`."
+              en: "Create `notes.txt` with `echo \"hello\" > notes.txt`, look at `git status`, stage it (`git add`) and run `git status` again."
+            check:
+              all:
+                - files:
+                    - "notes.txt"
+                - ranCommands:
+                    - "git status"
+                    - "git add"
 
   - slug: 02-daily
     icon: "🛠️"
@@ -101,13 +178,110 @@ modules:
       en: "The staging area as a basket before shipping a parcel, meaningful commit messages, and syncing with a server."
     lessons:
       - slug: add-and-commit
-        minutes: 9
+        minutes: 14
         title:
           ru: "git add и git commit"
           en: "git add and git commit"
         summary:
           ru: "Изменения → корзина → коммит."
           en: "Changes → basket → commit."
+        steps:
+          - type: theory
+            file: add-and-commit.md
+          - type: terminal
+            id: first-commit
+            title:
+              ru: "Сделай первый коммит"
+              en: "Make your first commit"
+            task:
+              ru: "Создай репозиторий, файл `notes.txt`, добавь его в staging и закоммить с осмысленным сообщением."
+              en: "Create a repository, a `notes.txt` file, stage it and commit with a meaningful message."
+            hints:
+              - ru: "Порядок: `git init` → создать файл → `git add` → `git commit -m \"...\"`"
+                en: "Order: `git init` → create a file → `git add` → `git commit -m \"...\"`"
+              - ru: "Сообщение короче 8 символов тренажёр не примет — как и хороший тимлид 😉"
+                en: "Messages shorter than 8 characters are rejected — just like a good tech lead would 😉"
+            check:
+              all:
+                - initialized: true
+                - commits: ">=1"
+                - files:
+                    - "notes.txt"
+                - status.clean: true
+                - ranCommands:
+                    - "git add"
+                    - "git commit"
+          - type: quiz
+            id: commit-message-quiz
+            question:
+              ru: "Какой коммит-месседж ты бы принял в ревью?"
+              en: "Which commit message would you approve in review?"
+            options:
+              - id: a
+                text:
+                  ru: "`fix: падение при пустом файле`"
+                  en: "`fix: crash on empty file`"
+                correct: true
+                explain:
+                  ru: "Тип изменения и суть — через месяц всё понятно без открытия диффа."
+                  en: "The type of change plus the essence — clear in a month without opening the diff."
+              - id: b
+                text:
+                  ru: "`fix`"
+                  en: "`fix`"
+                explain:
+                  ru: "Что именно исправлено? Придётся открывать дифф, чтобы это узнать."
+                  en: "Fixed what, exactly? You'd have to open the diff to find out."
+              - id: c
+                text:
+                  ru: "`update`"
+                  en: "`update`"
+                explain:
+                  ru: "Самое бесполезное слово в истории. Обновлено вообще всё что угодно."
+                  en: "The most useless word in history. Anything at all could have been updated."
+          - type: checklist
+            id: commit-habits
+            title:
+              ru: "Привычки, которые сэкономят часы"
+              en: "Habits that will save you hours"
+            items:
+              - ru: "Перед коммитом смотрю `git status` и `git diff`"
+                en: "Before committing I check `git status` and `git diff`"
+              - ru: "Пишу сообщение по шаблону `тип: что сделано`"
+                en: "I write messages as `type: what changed`"
+              - ru: "Коммичу маленькими порциями, а не «всё за день»"
+                en: "I commit in small pieces, not \"everything at once\""
+
+      - slug: push-and-pull
+        minutes: 12
+        title:
+          ru: "git push и git pull"
+          en: "git push and git pull"
+        summary:
+          ru: "Отправить работу на GitHub и забрать чужую."
+          en: "Send work to GitHub and pull in someone else's."
+        steps:
+          - type: theory
+            file: push-and-pull.md
+          - type: terminal
+            id: push-practice
+            title:
+              ru: "Отправь коммит на remote"
+              en: "Push a commit to the remote"
+            task:
+              ru: "Добавь файл `RELEASE.md`, закоммить его и отправь в `origin` командой `git push -u origin main`."
+              en: "Add a `RELEASE.md` file, commit it and push to `origin` with `git push -u origin main`."
+            setup:
+              - git init
+            check:
+              all:
+                - initialized: true
+                - commits: ">=1"
+                - files:
+                    - "RELEASE.md"
+                - pushed: main
+                - ranCommands:
+                    - "git push"
 
   - slug: 03-branching
     icon: "🌿"
@@ -123,13 +297,173 @@ modules:
       en: "Branches, switch, merge, and the big scary conflict that turns out to be perfectly manageable."
     lessons:
       - slug: branches
-        minutes: 8
+        minutes: 12
         title:
           ru: "Зачем нужны ветки"
           en: "Why branches exist"
         summary:
           ru: "branch, switch и как не потеряться."
           en: "branch, switch, and how not to get lost."
+        steps:
+          - type: theory
+            file: branches.md
+          - type: quiz
+            id: switch-quiz
+            question:
+              ru: "Какая команда создаёт ветку `feature` **и сразу** переключает тебя в неё?"
+              en: "Which command creates the branch `feature` **and** switches to it?"
+            options:
+              - id: a
+                text:
+                  ru: "`git branch feature`"
+                  en: "`git branch feature`"
+                explain:
+                  ru: "Ветка создастся, но ты останешься там, где был."
+                  en: "The branch is created, but you stay where you were."
+              - id: b
+                text:
+                  ru: "`git switch -c feature`"
+                  en: "`git switch -c feature`"
+                correct: true
+                explain:
+                  ru: "Точно: `-c` значит create. Старый вариант — `git checkout -b feature`."
+                  en: "Correct: `-c` means create. The old spelling is `git checkout -b feature`."
+              - id: c
+                text:
+                  ru: "`git merge feature`"
+                  en: "`git merge feature`"
+                explain:
+                  ru: "Это слияние. И оно упадёт, если ветки ещё нет."
+                  en: "That's a merge. And it fails if the branch doesn't exist yet."
+          - type: terminal
+            id: branch-practice
+            title:
+              ru: "Ветка и коммит в ней"
+              en: "A branch and a commit inside it"
+            task:
+              ru: "Создай ветку `feature/notes`, перейди в неё, добавь файл `ideas.txt`, закоммить и вернись в `main`."
+              en: "Create the branch `feature/notes`, switch to it, add `ideas.txt`, commit, then go back to `main`."
+            setup:
+              - git init
+              - echo "initial" > README.md
+              - git add .
+              - 'git commit -m "chore: initial commit"'
+            hints:
+              - ru: "`git switch -c feature/notes` создаёт и переключает разом"
+                en: "`git switch -c feature/notes` creates and switches in one go"
+              - ru: "Вернуться: `git switch main`"
+                en: "To go back: `git switch main`"
+            check:
+              all:
+                - branch: main
+                - branchExists: feature/notes
+                - commits: ">=2"
+                - fileInHistory:
+                    - ideas.txt
+                - ranCommands:
+                    - "git switch -c"
+                    - "git commit"
+                    - "git switch main"
+          - type: quiz
+            id: branch-isolation-quiz
+            question:
+              ru: "Ты закоммитил `ideas.txt` в ветке `feature`. Что покажет `ls` после `git switch main`?"
+              en: "You committed `ideas.txt` on `feature`. What does `ls` show after `git switch main`?"
+            options:
+              - id: a
+                text:
+                  ru: "Файла не будет — он остался в ветке feature"
+                  en: "No file — it stays in the feature branch"
+                correct: true
+                explain:
+                  ru: "Ветки изолированы. Это и есть их суперсила: эксперимент не задевает main."
+                  en: "Branches are isolated. That's their superpower: experiments don't touch main."
+              - id: b
+                text:
+                  ru: "Файл будет, ветки делят одну папку"
+                  en: "The file is there, branches share one folder"
+                explain:
+                  ru: "Папка одна, но её содержимое зависит от текущей ветки — Git подменяет файлы при переключении."
+                  en: "There is one folder, but its contents follow the current branch — Git swaps files on switch."
+
+      - slug: merge-and-conflict
+        minutes: 15
+        title:
+          ru: "git merge и конфликты без паники"
+          en: "git merge and conflicts without panic"
+        summary:
+          ru: "Решаем настоящий merge conflict руками."
+          en: "Resolve a real merge conflict by hand."
+        steps:
+          - type: theory
+            file: merge-and-conflict.md
+          - type: terminal
+            id: merge-conflict-practice
+            title:
+              ru: "Реши конфликт и заверши слияние"
+              en: "Resolve the conflict and finish the merge"
+            task:
+              ru: "Начни слияние ветки `feature` в `main` (`git merge feature`), реши конфликт в `shared.txt` и заверши его коммит-сообщением."
+              en: "Start merging `feature` into `main` (`git merge feature`), resolve the conflict in `shared.txt` and finish it with a commit."
+            setup:
+              - git init
+              - echo "base version" > shared.txt
+              - git add .
+              - "git commit -m 'chore: base shared.txt'"
+              - git switch -c feature
+              - echo "feature version" > shared.txt
+              - git add .
+              - "git commit -m 'feat: feature version'"
+              - git switch main
+              - echo "main version" > shared.txt
+              - git add .
+              - "git commit -m 'feat: main version'"
+            hints:
+              - ru: "`git merge feature` — и увидишь CONFLICT"
+                en: "`git merge feature` — and you'll see CONFLICT"
+              - ru: "В файле появятся маркеры `<<<<<<<` и `>>>>>>>`"
+                en: "The file will contain `<<<<<<<` and `>>>>>>>` markers"
+              - ru: "Выбери содержимое: `echo \"итог\" > shared.txt`, затем `git add shared.txt`"
+                en: "Pick content: `echo \"result\" > shared.txt`, then `git add shared.txt`"
+              - ru: "Финал — `git commit -m \"merge: resolve shared.txt\"`"
+                en: "Finally — `git commit -m \"merge: resolve shared.txt\"`"
+            check:
+              all:
+                - commits: ">=4"
+                - mergeInProgress: false
+                - conflicts: 0
+                - ranCommands:
+                    - "git merge"
+                    - "git add"
+                    - "git commit"
+          - type: quiz
+            id: merge-output-quiz
+            question:
+              ru: "В выводе `git merge` написано `Fast-forward`. Что это значит?"
+              en: "`git merge` printed `Fast-forward`. What does it mean?"
+            options:
+              - id: a
+                text:
+                  ru: "Конфликтов нет, указатель просто сдвинулся вперёд"
+                  en: "No conflicts, the pointer simply moved forward"
+                correct: true
+                explain:
+                  ru: "В целевой ветке не было своих коммитов, поэтому Git обошёлся без merge-коммита."
+                  en: "The target branch had no own commits, so Git skipped the merge commit."
+              - id: b
+                text:
+                  ru: "Все изменения утеряны"
+                  en: "All changes were lost"
+                explain:
+                  ru: "Наоборот — это самый безопасный вид слияния."
+                  en: "The opposite — it's the safest kind of merge."
+              - id: c
+                text:
+                  ru: "Появился конфликт, нужно править файлы"
+                  en: "A conflict appeared, files need editing"
+                explain:
+                  ru: "Конфликт выглядит совсем иначе: CONFLICT (content) и маркеры в файлах."
+                  en: "A conflict looks completely different: CONFLICT (content) plus markers in files."
 
   - slug: 04-advanced
     icon: "🚀"
@@ -145,13 +479,164 @@ modules:
       en: "How not to commit secrets, stash half-done work, and undo a commit without breaking history for your team."
     lessons:
       - slug: gitignore
-        minutes: 7
+        minutes: 10
         title:
           ru: ".gitignore: пароли и мусор"
           en: ".gitignore: secrets and junk"
         summary:
           ru: "Что нельзя отправлять в репозиторий."
           en: "What must never end up in a repository."
+        steps:
+          - type: theory
+            file: gitignore.md
+          - type: terminal
+            id: gitignore-practice
+            title:
+              ru: "Спрячь секрет от Git"
+              en: "Hide a secret from Git"
+            task:
+              ru: "В проекте лежит `.env` с паролем. Создай `.gitignore` с правилами `.env` и `node_modules/`, затем закоммить остальное."
+              en: "The project contains `.env` with a password. Create `.gitignore` with rules for `.env` and `node_modules/`, then commit the rest."
+            setup:
+              - git init
+              - echo "SECRET_TOKEN=abc123" > .env
+              - echo "console.log('hi')" > app.js
+            hints:
+              - ru: "Первое правило: `echo \".env\" > .gitignore`"
+                en: "First rule: `echo \".env\" > .gitignore`"
+              - ru: "Второе дописывается через `>>`: `echo \"node_modules/\" >> .gitignore`"
+                en: "Add the second one with `>>`: `echo \"node_modules/\" >> .gitignore`"
+              - ru: "`git status --ignored` покажет, что скрыто"
+                en: "`git status --ignored` shows what's hidden"
+            check:
+              all:
+                - fileContent:
+                    path: .gitignore
+                    contains: ".env"
+                - fileContent:
+                    path: .gitignore
+                    contains: "node_modules"
+                - ignored:
+                    - ".env"
+                    - "node_modules/react/index.js"
+                - commits: ">=1"
+                - status.clean: true
+          - type: quiz
+            id: gitignore-quiz
+            question:
+              ru: "Ты случайно закоммитил `.env` с паролем. Добавил его в `.gitignore`. Пароль в безопасности?"
+              en: "You accidentally committed `.env` with a password. You added it to `.gitignore`. Is the password safe?"
+            options:
+              - id: a
+                text:
+                  ru: "Нет: он остался в истории — нужно менять пароль"
+                  en: "No: it stays in history — change the password"
+                correct: true
+                explain:
+                  ru: "`.gitignore` влияет только на будущие добавления. История уже содержит секрет, и её может скачать кто угодно."
+                  en: "`.gitignore` only affects future adds. History already contains the secret, and anyone can download it."
+              - id: b
+                text:
+                  ru: "Да, `.gitignore` его скрывает"
+                  en: "Yes, `.gitignore` hides it"
+                explain:
+                  ru: "Скрывает только из `git status`. В коммите пароль остался."
+                  en: "It only hides it from `git status`. The commit still holds the password."
+
+      - slug: stash-reset-revert
+        minutes: 16
+        title:
+          ru: "stash, reset и revert"
+          en: "stash, reset and revert"
+        summary:
+          ru: "Спрятать, отменить и не сломать историю."
+          en: "Stash, undo, and don't break history."
+        steps:
+          - type: theory
+            file: stash-reset-revert.md
+          - type: terminal
+            id: stash-practice
+            title:
+              ru: "Спрячь и верни изменения"
+              en: "Stash and restore changes"
+            task:
+              ru: "В рабочей папке есть незакоммиченная правка. Спрячь её через `git stash`, посмотри список и верни через `git stash pop`."
+              en: "The working tree has an uncommitted change. Hide it with `git stash`, list it, then bring it back with `git stash pop`."
+            setup:
+              - git init
+              - echo "version 1" > notes.txt
+              - git add .
+              - "git commit -m 'chore: notes v1'"
+              - echo "version 2 (draft)" > notes.txt
+            hints:
+              - ru: "`git stash` — и `git status` станет чистым"
+                en: "`git stash` — and `git status` turns clean"
+              - ru: "`git stash list` покажет запись, `git stash pop` вернёт её"
+                en: "`git stash list` shows the entry, `git stash pop` brings it back"
+            check:
+              all:
+                - commits: ">=1"
+                - ranCommands:
+                    - "git stash"
+                    - "git stash pop"
+                - fileContent:
+                    path: notes.txt
+                    contains: "draft"
+          - type: terminal
+            id: reset-practice
+            title:
+              ru: "Отмени лишний коммит"
+              en: "Undo an extra commit"
+            task:
+              ru: "Последний коммит `wip: draft` лишний. Отмени его через `git reset --soft HEAD~1`, чтобы изменения остались в staging, затем верни всё как было через `git reset --hard HEAD`."
+              en: "The last commit `wip: draft` is extra. Undo it with `git reset --soft HEAD~1` so changes stay staged, then restore everything with `git reset --hard HEAD`."
+            setup:
+              - git init
+              - echo "base" > file.txt
+              - git add .
+              - "git commit -m 'chore: base commit'"
+              - echo "temp" > file.txt
+              - git add .
+              - 'git commit -m "wip: draft"'
+            hints:
+              - ru: "`HEAD~1` — коммит перед текущим"
+                en: "`HEAD~1` is the commit before the current one"
+              - ru: "`--hard` стирает изменения, `--soft` оставляет"
+                en: "`--hard` wipes changes, `--soft` keeps them"
+            check:
+              all:
+                - commits: "==1"
+                - ranCommands:
+                    - "git reset --soft"
+                    - "git reset --hard"
+          - type: quiz
+            id: reset-vs-revert-quiz
+            question:
+              ru: "Коммит уже в общей ветке `main`, и коллеги его скачали. Как отменить его правильно?"
+              en: "The commit is already on the shared `main` branch and teammates pulled it. What's the right way to undo it?"
+            options:
+              - id: a
+                text:
+                  ru: "`git revert <коммит>` — новый коммит-отмена"
+                  en: "`git revert <commit>` — a new commit that undoes it"
+                correct: true
+                explain:
+                  ru: "История не переписывается, никому не нужно делать reset у себя. Поэтому в командах любят revert."
+                  en: "History isn't rewritten and nobody has to reset locally. That's why teams love revert."
+              - id: b
+                text:
+                  ru: "`git reset --hard HEAD~1`"
+                  en: "`git reset --hard HEAD~1`"
+                explain:
+                  ru: "Это перепишет историю: у коллег разъедется ветка, а последующий push потребует --force."
+                  en: "That rewrites history: teammates diverge, and the next push needs --force."
+              - id: c
+                text:
+                  ru: "Удалить ветку и создать заново"
+                  en: "Delete the branch and recreate it"
+                explain:
+                  ru: "Слишком радикально — потеряются и полезные коммиты."
+                  en: "Too drastic — useful commits would be lost too."
 
   - slug: 05-github
     icon: "🤝"
@@ -167,40 +652,291 @@ modules:
       en: "Painless SSH setup, Pull Requests, forks, and reviews — the way real teams work."
     lessons:
       - slug: ssh-keys
-        minutes: 11
+        minutes: 13
         title:
           ru: "SSH-ключи без боли"
           en: "SSH keys without the pain"
         summary:
           ru: "Один раз настроил — пароли больше не нужны."
           en: "Set it up once, never type a password again."
+        steps:
+          - type: theory
+            file: ssh-keys.md
+          - type: quiz
+            id: ssh-quiz
+            question:
+              ru: "Какой файл можно спокойно опубликовать на GitHub?"
+              en: "Which file is safe to publish on GitHub?"
+            options:
+              - id: a
+                text:
+                  ru: "`id_ed25519.pub`"
+                  en: "`id_ed25519.pub`"
+                correct: true
+                explain:
+                  ru: "Открытый ключ для того и нужен — он же загружается в настройки GitHub."
+                  en: "That's exactly what a public key is for — it's uploaded to GitHub settings."
+              - id: b
+                text:
+                  ru: "`id_ed25519`"
+                  en: "`id_ed25519`"
+                explain:
+                  ru: "Это закрытый ключ. Опубликуешь — потеряешь доступ и подставишь все свои репозитории."
+                  en: "That's the private key. Publish it and you lose access and expose every repository."
+              - id: c
+                text:
+                  ru: "`known_hosts`"
+                  en: "`known_hosts`"
+                explain:
+                  ru: "Безобиден, но и пользы в репозитории нет: это локальный список известных серверов."
+                  en: "Harmless, but useless in a repo: it's a local list of known servers."
+          - type: checklist
+            id: ssh-setup-check
+            title:
+              ru: "Чек-лист настройки SSH"
+              en: "SSH setup checklist"
+            items:
+              - ru: "Сгенерировал ключ: `ssh-keygen -t ed25519 -C \"почта\"`"
+                en: "Generated a key: `ssh-keygen -t ed25519 -C \"email\"`"
+              - ru: "Добавил `.pub` в Settings → SSH and GPG keys на GitHub"
+                en: "Added the `.pub` file in Settings → SSH and GPG keys on GitHub"
+              - ru: "Проверил: `ssh -T git@github.com` отвечает приветствием"
+                en: "Verified: `ssh -T git@github.com` greets me back"
+              - ru: "Для клонирования использую адрес `git@github.com:...`"
+                en: "I clone using `git@github.com:...` addresses"
+          - type: terminal
+            id: ssh-push-practice
+            title:
+              ru: "Отправь ветку как в реальном проекте"
+              en: "Push a branch like in a real project"
+            task:
+              ru: "В репозитории уже настроен `origin`. Создай ветку `feature/ssh`, добавь файл, закоммить и запушь её: `git push -u origin feature/ssh`."
+              en: "The repository already has `origin`. Create the `feature/ssh` branch, add a file, commit and push: `git push -u origin feature/ssh`."
+            setup:
+              - git init
+              - echo "project" > README.md
+              - git add .
+              - 'git commit -m "chore: initial commit"'
+              - git remote add origin git@github.com:user/project.git
+            check:
+              all:
+                - remoteBranch: origin/feature/ssh
+                - commits: ">=2"
+                - ranCommands:
+                    - "git push"
+
+      - slug: pull-request
+        minutes: 13
+        title:
+          ru: "Pull Request, форк и code review"
+          en: "Pull Requests, forks and code review"
+        summary:
+          ru: "Как изменения попадают в main через ревью."
+          en: "How changes reach main through review."
+        steps:
+          - type: theory
+            file: pull-request.md
+          - type: terminal
+            id: pr-practice
+            title:
+              ru: "Подготовь ветку для PR"
+              en: "Prepare a branch for a PR"
+            task:
+              ru: "Создай ветку `feature/profile-avatar`, добавь изменение, закоммить его и отправь ветку в `origin` — ровно то, из чего начинается Pull Request."
+              en: "Create the branch `feature/profile-avatar`, make a change, commit and push it to `origin` — exactly what a Pull Request starts from."
+            setup:
+              - git init
+              - echo "profile" > profile.txt
+              - git add .
+              - 'git commit -m "chore: initial profile"'
+              - git remote add origin git@github.com:user/project.git
+            hints:
+              - ru: "Ветка: `git switch -c feature/profile-avatar`"
+                en: "Branch: `git switch -c feature/profile-avatar`"
+              - ru: "Push: `git push -u origin feature/profile-avatar`"
+                en: "Push: `git push -u origin feature/profile-avatar`"
+            check:
+              all:
+                - remoteBranch: origin/feature/profile-avatar
+                - branchExists: feature/profile-avatar
+                - commits: ">=2"
+                - ranCommands:
+                    - "git switch -c"
+                    - "git commit"
+                    - "git push"
+          - type: quiz
+            id: pr-quiz
+            question:
+              ru: "Зачем нужен Pull Request, если можно сразу влить ветку в main?"
+              en: "Why bother with a Pull Request if you could merge straight into main?"
+            options:
+              - id: a
+                text:
+                  ru: "Изменения видны целиком, их обсуждают и проверяют до попадания в main"
+                  en: "Changes are visible in full and get discussed and checked before reaching main"
+                correct: true
+                explain:
+                  ru: "PR — это код-ревью плюс автоматические проверки плюс история решений. Git-команды этого не дают."
+                  en: "A PR is code review plus automated checks plus a record of decisions. Git commands alone give none of that."
+              - id: b
+                text:
+                  ru: "Без PR Git не умеет сливать ветки"
+                  en: "Without a PR Git cannot merge branches"
+                explain:
+                  ru: "Умеет — `git merge`. PR просто добавляет ревью и проверки."
+                  en: "It can — `git merge`. A PR just adds review and checks."
+              - id: c
+                text:
+                  ru: "PR обязателен для любого репозитория"
+                  en: "A PR is mandatory for every repository"
+                explain:
+                  ru: "В личном репозитории ты вправе пушить в main напрямую. Ограничение вводит команда."
+                  en: "In your own repo you may push to main directly. The constraint is a team decision."
+          - type: checklist
+            id: pr-checklist
+            title:
+              ru: "Чек-лист автора PR"
+              en: "PR author checklist"
+            items:
+              - ru: "Ветка названа по делу: `feature/...`, `fix/...`"
+                en: "The branch is named meaningfully: `feature/...`, `fix/...`"
+              - ru: "В описании есть «что», «зачем» и «как проверить»"
+                en: "The description has what, why and how to check"
+              - ru: "Изменения небольшие, без случайных файлов"
+                en: "The change is small, no stray files"
+              - ru: "Я сам прочитал свой дифф перед отправкой"
+                en: "I read my own diff before sending"
 
 cheatsheet:
   - group:
       ru: "Каждый день"
       en: "Every day"
     commands:
-      - cmd: git status
+      - cmd: "git status"
         desc:
           ru: "Что происходит в репозитории"
           en: "What's going on in the repository"
-      - cmd: git add .
+      - cmd: "git add ."
         desc:
           ru: "Положить все изменения в staging area"
           en: "Stage all changes"
-      - cmd: git commit -m "сообщение"
+      - cmd: 'git commit -m "docs: add notes"'
         desc:
           ru: "Зафиксировать изменения"
           en: "Record the changes"
-  - group:
-      ru: "Ветки"
-      en: "Branches"
-    commands:
-      - cmd: git switch -c feature
+      - cmd: "git log --oneline --graph"
         desc:
-          ru: "Создать ветку и сразу перейти в неё"
+          ru: "История коммитов и веток"
+          en: "Commit and branch history"
+      - cmd: "git diff"
+        desc:
+          ru: "Что изменилось, но ещё не в staging"
+          en: "What changed but isn't staged"
+      - cmd: "git diff --cached"
+        desc:
+          ru: "Что уже в staging area"
+          en: "What's already staged"
+  - group:
+      ru: "Ветки и слияние"
+      en: "Branches and merging"
+    commands:
+      - cmd: "git branch"
+        desc:
+          ru: "Список веток"
+          en: "List branches"
+      - cmd: "git switch -c feature"
+        desc:
+          ru: "Создать ветку и перейти в неё"
           en: "Create a branch and switch to it"
-      - cmd: git merge feature
+      - cmd: "git switch main"
+        desc:
+          ru: "Перейти в ветку main"
+          en: "Switch to main"
+      - cmd: "git merge feature"
         desc:
           ru: "Влить ветку feature в текущую"
           en: "Merge feature into the current branch"
+      - cmd: "git merge --abort"
+        desc:
+          ru: "Отменить слияние с конфликтом"
+          en: "Cancel a merge with conflicts"
+      - cmd: "git branch -d feature"
+        desc:
+          ru: "Удалить влитую ветку"
+          en: "Delete a merged branch"
+  - group:
+      ru: "Sync с сервером"
+      en: "Syncing with a server"
+    commands:
+      - cmd: "git remote -v"
+        desc:
+          ru: "Показать адреса remote"
+          en: "Show remote addresses"
+      - cmd: "git remote add origin <url>"
+        desc:
+          ru: "Привязать удалённый репозиторий"
+          en: "Attach a remote repository"
+      - cmd: "git push -u origin main"
+        desc:
+          ru: "Отправить ветку и запомнить связку"
+          en: "Push a branch and remember the pairing"
+      - cmd: "git pull"
+        desc:
+          ru: "Забрать чужие изменения"
+          en: "Fetch someone else's changes"
+      - cmd: "git clone <url>"
+        desc:
+          ru: "Скопировать репозиторий целиком"
+          en: "Copy a repository with its history"
+  - group:
+      ru: "Отменить и спрятать"
+      en: "Undo and stash"
+    commands:
+      - cmd: "git stash"
+        desc:
+          ru: "Спрятать незакоммиченные изменения"
+          en: "Hide uncommitted changes"
+      - cmd: "git stash pop"
+        desc:
+          ru: "Вернуть спрятанное"
+          en: "Bring stashed changes back"
+      - cmd: "git reset --soft HEAD~1"
+        desc:
+          ru: "Отменить коммит, оставив изменения в staging"
+          en: "Undo a commit, keep changes staged"
+      - cmd: "git reset --hard HEAD"
+        desc:
+          ru: "Сбросить рабочую папку к последнему коммиту"
+          en: "Reset the working tree to the last commit"
+      - cmd: "git revert <commit>"
+        desc:
+          ru: "Отменить коммит новым коммитом"
+          en: "Undo a commit with a new commit"
+      - cmd: "git reflog"
+        desc:
+          ru: "Журнал перемещений HEAD — спасение от потерь"
+          en: "HEAD movement log — your safety net"
+  - group:
+      ru: "GitHub и настройка"
+      en: "GitHub and setup"
+    commands:
+      - cmd: 'ssh-keygen -t ed25519 -C "me@example.com"'
+        desc:
+          ru: "Создать SSH-ключ"
+          en: "Generate an SSH key"
+      - cmd: "ssh -T git@github.com"
+        desc:
+          ru: "Проверить подключение к GitHub"
+          en: "Check the GitHub connection"
+      - cmd: "gh auth login"
+        desc:
+          ru: "Войти в GitHub CLI"
+          en: "Log in to GitHub CLI"
+      - cmd: "gh pr create --fill"
+        desc:
+          ru: "Создать Pull Request из текущей ветки"
+          en: "Create a PR from the current branch"
+      - cmd: 'git config --global user.name "Имя"'
+        desc:
+          ru: "Подписать коммиты своим именем"
+          en: "Sign commits with your name"

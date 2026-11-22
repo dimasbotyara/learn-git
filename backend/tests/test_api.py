@@ -43,7 +43,7 @@ def test_unknown_locale_falls_back(client):
 def test_lesson_has_steps_and_nav(client):
     payload = client.get("/api/lessons/01-basics/status-and-config").get_json()
     types = [step["type"] for step in payload["steps"]]
-    assert types == ["theory", "quiz", "checklist"]
+    assert types == ["theory", "quiz", "terminal"]
     assert "Untracked" in payload["steps"][1]["options"][0]["text"]
     assert payload["next"]["lesson"] == "add-and-commit"
 
@@ -51,7 +51,27 @@ def test_lesson_has_steps_and_nav(client):
 def test_lesson_english(client):
     payload = client.get("/api/lessons/01-basics/status-and-config?lang=en").get_json()
     assert "git status" in payload["steps"][0]["html"]
-    assert payload["steps"][2]["title"].startswith("Set yourself up")
+    assert payload["steps"][2]["type"] == "terminal"
+    assert "git status" in payload["steps"][2]["task"]
+
+
+def test_terminal_step_payload(client):
+    payload = client.get("/api/lessons/03-branching/merge-and-conflict?lang=ru").get_json()
+    terminal = next(step for step in payload["steps"] if step["type"] == "terminal")
+    assert terminal["check"]["all"]
+    assert terminal["hints"]
+    assert any(cmd.startswith("git ") for cmd in terminal["setup"])
+    assert "конфликт" in terminal["task"].lower()
+
+
+def test_every_lesson_has_steps(client):
+    course = client.get("/api/course?lang=ru").get_json()
+    for module in course["modules"]:
+        for lesson in module["lessons"]:
+            payload = client.get(f"/api/lessons/{module['slug']}/{lesson['slug']}?lang=ru").get_json()
+            assert payload["steps"], f"{module['slug']}/{lesson['slug']} без шагов"
+            has_practice = any(step["type"] in {"terminal", "quiz", "checklist"} for step in payload["steps"])
+            assert has_practice, f"{module['slug']}/{lesson['slug']} без практики"
 
 
 def test_lesson_404(client):

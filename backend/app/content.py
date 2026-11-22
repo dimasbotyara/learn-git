@@ -277,6 +277,8 @@ class Course:
                         "id": step.get("id"),
                         "title": self.localize(step.get("title", ""), locale),
                         "task": self.localize(step.get("task", ""), locale),
+                        "hints": self.localize(step.get("hints", []), locale),
+                        "setup": step.get("setup", []),
                         "check": step.get("check", {}),
                     }
                 )
