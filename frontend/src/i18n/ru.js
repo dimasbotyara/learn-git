@@ -47,6 +47,7 @@ export default {
     lesson: 'урок',
     soon: 'Скоро',
     minutes: 'мин',
+    steps: 'шага',
     start: 'Начать',
     continue: 'Продолжить',
     completed: 'Пройдено',

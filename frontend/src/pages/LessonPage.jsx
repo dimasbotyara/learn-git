@@ -123,7 +123,7 @@ export function LessonPage({ onLessonMeta }) {
             <IconTerminal width={13} height={13} /> {data.minutes} {t('course.minutes')}
           </span>
           <span className="pill">
-            {stepCount} {t('course.lessons')}
+            {stepCount} {t('course.steps')}
           </span>
           {done && (
             <span className="pill pill--accent">

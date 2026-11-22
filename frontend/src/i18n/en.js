@@ -47,6 +47,7 @@ export default {
     lesson: 'lesson',
     soon: 'Soon',
     minutes: 'min',
+    steps: 'steps',
     start: 'Start',
     continue: 'Continue',
     completed: 'Completed',

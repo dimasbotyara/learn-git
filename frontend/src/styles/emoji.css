@@ -1,0 +1,12 @@
+/*
+  Noto Color Emoji (COLRv0) — один файл, локально, без CDN.
+  Нужен для систем без своего emoji-шрифта (частый случай на Linux).
+  Берём именно COLR-сборку: SVG-вариант не рисуется в части рендереров.
+*/
+@font-face {
+  font-family: 'Noto Color Emoji';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-emoji-400-normal.woff2') format('woff2');
+}

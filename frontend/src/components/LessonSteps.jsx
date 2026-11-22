@@ -4,6 +4,7 @@ import { useProgress } from '../progress'
 import { useEffects } from '../effects'
 import { Link } from 'react-router-dom'
 import { Markdown } from './Markdown'
+import { InlineCode } from './InlineCode'
 import { IconCheck } from './Icons'
 
 export function LessonSteps({ steps, onComplete }) {
@@ -92,7 +93,9 @@ export function QuizStep({ step, recordQuiz, onComplete, t }) {
       <div className="pill pill--accent" style={{ marginBottom: 'var(--space-3)' }}>
         🧠 {t('lesson.quizHint')}
       </div>
-      <h3 style={{ marginTop: 0 }}>{step.question}</h3>
+      <h3 style={{ marginTop: 0 }}>
+        <InlineCode text={step.question} />
+      </h3>
       <div className="quiz__options">
         {step.options.map((option, index) => {
           const isPicked = picked === option.id
@@ -108,7 +111,9 @@ export function QuizStep({ step, recordQuiz, onComplete, t }) {
           return (
             <button key={option.id} type="button" className={className} onClick={() => pick(option)} disabled={revealed}>
               <span className="quiz__letter">{String.fromCharCode(65 + index)}</span>
-              <span>{option.text}</span>
+              <span>
+                <InlineCode text={option.text} />
+              </span>
             </button>
           )
         })}
@@ -116,7 +121,7 @@ export function QuizStep({ step, recordQuiz, onComplete, t }) {
       {picked && (
         <div className={`quiz__explain ${pickedOption?.correct ? '' : 'quiz__explain--wrong'}`}>
           <strong>{pickedOption?.correct ? t('lesson.correct') : t('lesson.tryAgain')}</strong>{' '}
-          {pickedOption?.explain}
+          <InlineCode text={pickedOption?.explain || ''} />
         </div>
       )}
     </div>
@@ -161,7 +166,9 @@ export function ChecklistStep({ step, onComplete, t }) {
             aria-pressed={Boolean(values[index])}
           >
             <span className="checklist__box">{values[index] ? <IconCheck width={12} height={12} strokeWidth={3} /> : null}</span>
-            <span className="checklist__text">{item}</span>
+            <span className="checklist__text">
+              <InlineCode text={item} />
+            </span>
           </button>
         ))}
       </div>

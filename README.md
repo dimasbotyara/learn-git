@@ -1,123 +1,195 @@
-# learn-git 🚀
+<p align="center">
+  <img src="docs/banners/banner-en.svg" alt="learn-git — Git without the fear" width="100%">
+</p>
 
-Интерактивный курс по Git для новичков: теория простым языком, практика, симулятор терминала,
-визуальные merge-конфликты и приятные экранные эффекты. Всё работает офлайн — без CDN,
-с локальными шрифтами и библиотеками.
+<h1 align="center">learn-git 🚀</h1>
 
-**Стек:** Flask (JSON API) + React 18 / Vite (SPA), чистый CSS на переменных, 10 тем + редактор своих.
+<p align="center">
+  <b>An interactive Git course for absolute beginners.</b><br>
+  Plain-language theory, hands-on practice, 10 themes and two languages — fully offline, no CDN.
+</p>
 
-## Быстрый старт
+<p align="center">
+  <a href="README.ru.md"><img src="docs/badges/lang-ru.svg" alt="Русская версия" height="26"></a>
+  <img src="docs/badges/badge-flask.svg" alt="Flask 3.1" height="26">
+  <img src="docs/badges/badge-react.svg" alt="React 18" height="26">
+  <img src="docs/badges/badge-vite.svg" alt="Vite 6" height="26">
+  <img src="docs/badges/badge-python.svg" alt="Python 3.11" height="26">
+  <img src="docs/badges/badge-offline.svg" alt="No CDN" height="26">
+  <img src="docs/badges/badge-mit.svg" alt="MIT" height="26">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/en-home.png" alt="learn-git home page in English (Catppuccin Mocha theme)" width="100%">
+</p>
+
+---
+
+## 🌍 Language selector
+
+| Language | File |
+|---|---|
+| 🇬🇧 **English** | **you are here** |
+| 🇷🇺 **Русский** | **[README.ru.md](README.ru.md)** |
+
+> The app itself speaks **both languages**: the UI picks your browser language on the first visit,
+> and you can switch anytime with the 🌐 button in the header or in ⚙️ Settings.
+
+---
+
+## ✨ What it is
+
+A little course site that answers the questions every beginner stumbles over:
+
+- 😵 **“Is Git the same as GitHub?”** — a whole lesson on this mix-up alone.
+- 🧺 **“What is the staging area?”** — explained as a basket before shipping a parcel.
+- 🌿 **“What is a branch?”** and how to read `git merge` output without panic.
+- 💥 **“A merge conflict?!”** — built step by step, then resolved calmly.
+- 🔐 **“.env in a repository?”** — `.gitignore`, `stash`, `reset` vs `revert`.
+- 🤝 **SSH keys, Pull Requests, forks, code review.**
+
+## 🧩 Features
+
+| | |
+|---|---|
+| 🎨 **10 themes + your own** | Gruvbox Dark is the default. Catppuccin (Mocha / Macchiato / Frappé / Latte), Ayu (Dark / Mirage / Light), Gruvbox Light, Minimal Dark — plus a built-in editor that lets you build a custom palette from 20 colors and save it in your browser. |
+| 🌐 **Two languages** | Russian and English, auto-detected from the browser, switchable in the header and in Settings. Lessons are written twice, not machine-translated. |
+| 📈 **Progress that sticks** | Completed lessons, XP and a day streak in `localStorage`, with JSON export/import so a browser cleanup doesn't hurt. |
+| 🎉 **Delightful effects** | Confetti, toasts and micro-animations that respect `prefers-reduced-motion` and can be turned off. |
+| 📱 **Mobile first** | Drawer navigation, sticky lesson bar, 44px touch targets, safe-area padding for iOS. |
+| 📴 **Works offline** | Inter, JetBrains Mono, Noto Color Emoji, `highlight.js` and `canvas-confetti` are installed from npm and bundled — zero requests to a CDN at runtime. |
+| 🧪 **Tested** | 10 pytest API tests + 28 frontend checks in jsdom (no Chromium needed). |
+
+## 🖼️ Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/en-home.png" alt="Home page"><br><sub><b>Home</b> — course outline and progress</sub></td>
+    <td width="50%"><img src="docs/screenshots/en-lesson.png" alt="Lesson page"><br><sub><b>Lesson</b> — theory, highlighted code, callouts</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/en-settings.png" alt="Settings panel"><br><sub><b>Settings</b> — 10 themes, language, text size, effects</sub></td>
+    <td width="50%"><img src="docs/screenshots/en-cheatsheet.png" alt="Cheatsheet"><br><sub><b>Cheatsheet</b> — every command, click to copy</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshots/ru-mobile.png" alt="Mobile layout" width="30%">
+  &nbsp;
+  <img src="docs/screenshots/ru-mobile-lesson.png" alt="Mobile lesson view" width="30%">
+</p>
+
+## 📚 Course outline
+
+| | Module | What's inside |
+|---|---|---|
+| 📚 | **1. Basics** | Git vs GitHub, `git init`, `git clone`, `git status`, first-time `git config` |
+| 🛠️ | **2. Daily routine** | The staging area, `git add`, `git commit`, meaningful messages, `push` / `pull` |
+| 🌿 | **3. Branching and merging** | Why branches exist, `git branch`, `switch`, `merge`, and a real merge conflict |
+| 🚀 | **4. Advanced (but essential)** | `.gitignore` for secrets, `git stash`, `reset --soft/--mixed/--hard`, `revert` |
+| 🤝 | **5. GitHub and teamwork** | SSH keys, forks, Pull Requests, code review |
+
+Module 1 is fully written in both languages; the rest are scaffolded and land next
+(see [`docs/PLAN.md`](docs/PLAN.md) for the roadmap).
+
+## 🚀 Quick start
 
 ```bash
 ./scripts/start.sh
 ```
 
-Скрипт создаст `.venv`, поставит зависимости, соберёт фронтенд и поднимет сервер
-на **http://localhost:13444** (`0.0.0.0`).
+The script creates `.venv`, installs dependencies, builds the frontend and serves everything
+at **http://localhost:13444** (`0.0.0.0`).
 
-Вручную:
+Manual route:
 
 ```bash
-# бэкенд
+# backend
 python3 -m venv .venv
 ./.venv/bin/pip install -r backend/requirements.txt
 
-# фронтенд
+# frontend
 cd frontend && npm install && npm run build && cd ..
 
-# запуск (0.0.0.0:13444)
+# run (0.0.0.0:13444)
 ./.venv/bin/python backend/run.py
 ```
 
-Разработка с горячей перезагрузкой:
+Development with hot reload:
 
 ```bash
-./scripts/start.sh --dev   # или: (cd backend && ../.venv/bin/python run.py) + (cd frontend && npm run dev)
+./scripts/start.sh --dev   # Vite on 0.0.0.0:5173 proxies /api to Flask on 13444
 ```
 
-Vite на `0.0.0.0:5173` проксирует `/api` в Flask на `13444`, поэтому API и UI всегда рядом.
-
-## Что уже работает
-
-- **Каркас сайта**: хедер с прогрессом, сайдбар курса, мобильный drawer, sticky-навигация на телефоне.
-- **Курс из контента, а не из кода**: `content/course.yaml` + Markdown-файлы уроков (RU/EN).
-- **10 тем**: Gruvbox Dark (по умолчанию) и Light, Catppuccin Mocha / Macchiato / Frappé / Latte,
-  Ayu Dark / Mirage / Light, Minimal Dark. Плюс **редактор своей темы** (20 цветов, база — любая встроенная).
-- **Два языка**: RU/EN, автоопределение по браузеру, переключатель в хедере и в настройках.
-- **Прогресс**: пройденные уроки, XP, серия дней, экспорт/импорт JSON — всё в `localStorage`.
-- **Эффекты**: конфетти, анимации, тосты; уважают `prefers-reduced-motion` и настройку «Эффекты».
-- **Курс**: 5 модулей, 7 уроков (модуль 1 написан полностью на двух языках, остальные — в работе).
-- **Тесты**: 10 pytest-тестов API и 28 браузерных проверок фронтенда (jsdom, без Chromium).
-
-## Структура
+## 🏗️ How it's built
 
 ```
 backend/
-  app/__init__.py        # create_app: API + раздача SPA из frontend/dist
-  app/content.py         # YAML + Markdown → JSON, локализация, выноски :::note
-  app/routes/api.py      # /api/health, /api/course, /api/lessons/..., /api/cheatsheet
-  app/routes/web.py      # SPA-fallback и подсказка «собери фронтенд»
-  run.py                 # 0.0.0.0:13444
-  tests/                 # pytest
+  app/content.py        # YAML + Markdown → JSON, localization, :::note callouts
+  app/routes/api.py     # /api/health, /api/course, /api/lessons/…, /api/cheatsheet
+  app/routes/web.py     # serves the built SPA + a “build the frontend” hint
+  run.py                # 0.0.0.0:13444
 content/
-  course.yaml            # модули, уроки, шпаргалка
-  modules/01-basics/*.md # уроки (ru) и *.en.md (en)
-frontend/
-  src/styles/            # tokens.css (все темы), base, layout, components
-  src/settings.jsx       # темы, язык, эффекты, размер текста
-  src/i18n/{ru,en}.js    # словари интерфейса
-  src/progress.jsx       # localStorage-прогресс
-  src/pages/             # Home, Lesson, Cheatsheet, Sandbox
-  scripts/smoke-router.mjs
-scripts/start.sh
-docs/PLAN.md             # план этапов и принятые решения
+  course.yaml           # modules, lessons, cheatsheet
+  modules/01-basics/    # lesson.md (ru) + lesson.en.md (en)
+frontend/src/
+  styles/tokens.css     # every theme as CSS variables
+  settings.jsx          # theme, language, effects, text size
+  i18n/{ru,en}.js       # UI dictionaries
+  progress.jsx          # localStorage progress
+  pages/                # Home, Lesson, Cheatsheet, Sandbox
+scripts/
+  start.sh              # build + run in one command
+  smoke-router.mjs      # 28 frontend checks in jsdom
+  make_banner.py        # generates SVG banners (docs/banners) and badges (docs/badges)
+docs/
+  PLAN.md  banners/  screenshots/
 ```
 
-## API
+One port, one origin: Flask serves the JSON API **and** the built React app, so `/api` never
+needs CORS and the preview works through a single tunnel.
 
-| Маршрут | Что отдаёт |
-|---|---|
-| `GET /api/health` | статус сервиса |
-| `GET /api/meta` | локали по умолчанию и список языков |
-| `GET /api/course?lang=ru` | дерево модулей и уроков |
-| `GET /api/nav?lang=ru` | плоский список для навигации |
-| `GET /api/lessons/<module>/<lesson>?lang=ru` | шаги урока: теория (HTML), квизы, чек-листы |
-| `GET /api/cheatsheet?lang=ru` | команды шпаргалки |
+## 🎨 Adding a lesson
 
-## Как добавить урок
+1. Create `content/modules/<module>/<slug>.md` (plus `<slug>.en.md` for English).
+2. Add it to `content/course.yaml`, optionally with `steps` (`theory`, `quiz`, `checklist`, `terminal`).
+3. Restart Flask — content is cached in-process.
 
-1. Создай `content/modules/<модуль>/<slug>.md` (и `<slug>.en.md` для английского).
-2. Добавь урок в `content/course.yaml` — можно с `steps` (`theory`, `quiz`, `checklist`, `terminal`).
-3. Перезапусти Flask (контент кэшируется в процессе).
-
-В markdown есть выноски:
+Callouts in Markdown:
 
 ```markdown
-:::tip Совет
-Текст подсказки
+:::tip A handy tip
+Text of the tip
 :::
 ```
 
-## Тесты
+## 🧪 Tests
 
 ```bash
 # API
 cd backend && ../.venv/bin/python -m pytest -q
 
-# фронтенд (нужен запущенный Flask — из него берутся фикстуры)
+# frontend (needs Flask running — it dumps API fixtures first)
 cd frontend && npm run smoke
 ```
 
-## Темы и свои палитры
+## 🖌️ Regenerating the banner
 
-Встроенные темы описаны дважды: как CSS-переменные в `frontend/src/styles/tokens.css`
-и как JS-палитры в `frontend/src/themes.js` (для превью и клонирования).
-Своя тема хранится в `localStorage` как набор значений `--переменных` — она не требует сборки
-и не ломает встроенные.
+The banner is pure SVG, drawn by code — text is converted to outlines so it renders identically
+everywhere and needs no fonts:
 
-Далее по плану: симулятор терминала, визуальный резолвер конфликтов, модули 2–5 целиком —
-см. `docs/PLAN.md`.
+```bash
+./.venv/bin/pip install fonttools brotli
+./.venv/bin/python scripts/make_banner.py
+```
 
-## Лицензия
+The same script draws the local badges in `docs/badges` — no shields.io, no external images.
 
-MIT — см. [LICENSE](LICENSE).
+## 📄 License
+
+MIT — see [LICENSE](LICENSE).
+
+<p align="center">
+  <sub>Made with ♥ for everyone who is still afraid of the terminal.</sub><br>
+  <sub>🇷🇺 <a href="README.ru.md">Читать по-русски</a></sub>
+</p>

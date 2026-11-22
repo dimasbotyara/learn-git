@@ -30,8 +30,21 @@ def _md() -> MarkdownIt:
     return md
 
 
-def render_markdown(text: str, *, md: MarkdownIt | None = None) -> str:
+_H1_RE = re.compile(r"^\s*#\s+.+?(?:\n\s*\n|\n|$)", re.M)
+
+
+def strip_leading_h1(text: str) -> str:
+    """Убирает первый заголовок H1: заголовок урока рендерит страница."""
+    match = _H1_RE.match(text.lstrip("\ufeff\n "))
+    if not match:
+        return text
+    return text.lstrip("\ufeff\n ")[match.end():].lstrip("\n")
+
+
+def render_markdown(text: str, *, md: MarkdownIt | None = None, strip_h1: bool = False) -> str:
     """Markdown + поддержка контейнеров :::note / :::tip / :::warning."""
+    if strip_h1:
+        text = strip_leading_h1(text)
     md = md or _md()
     lines = text.splitlines()
     out: list[str] = []
@@ -232,7 +245,7 @@ class Course:
             item: dict[str, Any] = {"type": kind, "index": index}
             if kind == "theory":
                 item["html"] = render_markdown(
-                    self._step_markdown(module_slug, lesson, step, locale)
+                    self._step_markdown(module_slug, lesson, step, locale), strip_h1=True
                 )
             elif kind == "quiz":
                 item.update(

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useI18n } from '../i18n'
 import { useProgress } from '../progress'
-import { IconCheck, IconChevronRight } from './Icons'
+import { IconBook, IconCheck, IconChevronRight, IconTerminal } from './Icons'
 
 export function Sidebar({ modules, active, onNavigate, showCheatsheet = true }) {
   const { t } = useI18n()
@@ -97,14 +97,14 @@ export function Sidebar({ modules, active, onNavigate, showCheatsheet = true }) 
       {showCheatsheet && (
         <div className="sidebar__module" style={{ marginTop: 'var(--space-5)' }}>
           <NavLink to="/cheatsheet" className="sidebar__lesson" onClick={onNavigate}>
-            <span className="sidebar__lesson-mark" aria-hidden="true">
-              ⌘
+            <span className="sidebar__lesson-mark sidebar__lesson-mark--icon" aria-hidden="true">
+              <IconBook width={11} height={11} />
             </span>
             <span className="sidebar__lesson-text">{t('nav.cheatsheet')}</span>
           </NavLink>
           <NavLink to="/sandbox" className="sidebar__lesson" onClick={onNavigate}>
-            <span className="sidebar__lesson-mark" aria-hidden="true">
-              ▸
+            <span className="sidebar__lesson-mark sidebar__lesson-mark--icon" aria-hidden="true">
+              <IconTerminal width={11} height={11} />
             </span>
             <span className="sidebar__lesson-text">{t('nav.sandbox')}</span>
           </NavLink>

@@ -5,6 +5,8 @@ import { BrowserRouter } from 'react-router-dom'
 // Шрифты и стили — всё локально, из npm-пакетов, никаких CDN.
 import '@fontsource-variable/inter'
 import '@fontsource-variable/jetbrains-mono'
+
+import './styles/emoji.css'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/layout.css'
