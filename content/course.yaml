@@ -1,0 +1,206 @@
+# Структура курса. Каждый урок — отдельный markdown-файл рядом с локализованными версиями.
+# Шаг урока может быть: theory | quiz | terminal | checklist | conflict
+slug: learn-git
+version: 1
+default_locale: ru
+locales: [ru, en]
+
+modules:
+  - slug: 01-basics
+    icon: "📚"
+    accent: yellow
+    title:
+      ru: "База"
+      en: "Basics"
+    subtitle:
+      ru: "Чтобы не бояться терминала"
+      en: "So the terminal stops being scary"
+    description:
+      ru: "Разбираемся, что такое Git и GitHub, создаём первый репозиторий и настраиваем себя. Без магии и лишних слов."
+      en: "What Git and GitHub actually are, your first repository, and a proper setup. No magic, no fluff."
+    lessons:
+      - slug: what-is-git
+        minutes: 7
+        title:
+          ru: "Что такое Git и при чём тут GitHub"
+          en: "What Git is (and what GitHub is not)"
+        summary:
+          ru: "Главная путаница новичков за пять минут."
+          en: "The most common beginner mix-up, cleared up in five minutes."
+      - slug: first-repo
+        minutes: 10
+        title:
+          ru: "Первый репозиторий: init и clone"
+          en: "Your first repository: init and clone"
+        summary:
+          ru: "Создаём репозиторий с нуля и копируем чужой."
+          en: "Create a repository from scratch and copy someone else's."
+      - slug: status-and-config
+        minutes: 9
+        title:
+          ru: "git status и первичная настройка"
+          en: "git status and first-time setup"
+        summary:
+          ru: "Настраиваем имя и почту, учимся читать status."
+          en: "Set your name and email, learn to read status."
+        steps:
+          - type: theory
+            file: status-and-config.md
+          - type: quiz
+            id: status-quiz
+            question:
+              ru: "Ты создал файл, но ещё не делал `git add`. Что покажет `git status`?"
+              en: "You created a file but haven't run `git add` yet. What does `git status` show?"
+            options:
+              - id: a
+                text:
+                  ru: "Untracked files"
+                  en: "Untracked files"
+                correct: true
+                explain:
+                  ru: "Именно так: Git видит файл, но ещё не следит за ним — он неотслеживаемый (untracked)."
+                  en: "Exactly: Git sees the file but doesn't track it yet — it's untracked."
+              - id: b
+                text:
+                  ru: "Changes to be committed"
+                  en: "Changes to be committed"
+                explain:
+                  ru: "Это staging area. Туда файл попадает только после `git add`."
+                  en: "That's the staging area. A file gets there only after `git add`."
+              - id: c
+                text:
+                  ru: "Nothing to commit, working tree clean"
+                  en: "Nothing to commit, working tree clean"
+                explain:
+                  ru: "Так бывает, когда всё уже закоммичено. Новый файл Git бы заметил."
+                  en: "That happens when everything is committed. Git would still notice a new file."
+          - type: checklist
+            id: setup-check
+            title:
+              ru: "Настрой себя один раз — и навсегда"
+              en: "Set yourself up once — for good"
+            items:
+              - ru: "Я выполнил `git config --global user.name \"Имя Фамилия\"`"
+                en: "I ran `git config --global user.name \"Name Surname\"`"
+              - ru: "Я выполнил `git config --global user.email \"me@example.com\"`"
+                en: "I ran `git config --global user.email \"me@example.com\"`"
+              - ru: "Я проверил результат командой `git config --list`"
+                en: "I checked the result with `git config --list`"
+
+  - slug: 02-daily
+    icon: "🛠️"
+    accent: green
+    title:
+      ru: "Ежедневная рутина"
+      en: "Daily routine"
+    subtitle:
+      ru: "Самое важное: add, commit, push и pull"
+      en: "The important part: add, commit, push, pull"
+    description:
+      ru: "Staging area как корзина перед отправкой посылки, осмысленные сообщения коммитов и синхронизация с сервером."
+      en: "The staging area as a basket before shipping a parcel, meaningful commit messages, and syncing with a server."
+    lessons:
+      - slug: add-and-commit
+        minutes: 9
+        title:
+          ru: "git add и git commit"
+          en: "git add and git commit"
+        summary:
+          ru: "Изменения → корзина → коммит."
+          en: "Changes → basket → commit."
+
+  - slug: 03-branching
+    icon: "🌿"
+    accent: aqua
+    title:
+      ru: "Ветки и слияние"
+      en: "Branching and merging"
+    subtitle:
+      ru: "Магия начинается здесь"
+      en: "This is where the magic starts"
+    description:
+      ru: "Ветки, switch, merge и большой страшный конфликт, который на самом деле решается спокойно."
+      en: "Branches, switch, merge, and the big scary conflict that turns out to be perfectly manageable."
+    lessons:
+      - slug: branches
+        minutes: 8
+        title:
+          ru: "Зачем нужны ветки"
+          en: "Why branches exist"
+        summary:
+          ru: "branch, switch и как не потеряться."
+          en: "branch, switch, and how not to get lost."
+
+  - slug: 04-advanced
+    icon: "🚀"
+    accent: purple
+    title:
+      ru: "Продвинутые, но нужные фишки"
+      en: "Advanced (but essential) tricks"
+    subtitle:
+      ru: "gitignore, stash, reset и revert"
+      en: "gitignore, stash, reset and revert"
+    description:
+      ru: "Как не закоммитить пароли, спрятать недоделанное и отменить коммит, не сломав историю команде."
+      en: "How not to commit secrets, stash half-done work, and undo a commit without breaking history for your team."
+    lessons:
+      - slug: gitignore
+        minutes: 7
+        title:
+          ru: ".gitignore: пароли и мусор"
+          en: ".gitignore: secrets and junk"
+        summary:
+          ru: "Что нельзя отправлять в репозиторий."
+          en: "What must never end up in a repository."
+
+  - slug: 05-github
+    icon: "🤝"
+    accent: blue
+    title:
+      ru: "GitHub и команда"
+      en: "GitHub and teamwork"
+    subtitle:
+      ru: "SSH, PR и code review"
+      en: "SSH, PR, and code review"
+    description:
+      ru: "Настраиваем SSH без боли, разбираем Pull Request, форк и ревью — как это работает в реальных командах."
+      en: "Painless SSH setup, Pull Requests, forks, and reviews — the way real teams work."
+    lessons:
+      - slug: ssh-keys
+        minutes: 11
+        title:
+          ru: "SSH-ключи без боли"
+          en: "SSH keys without the pain"
+        summary:
+          ru: "Один раз настроил — пароли больше не нужны."
+          en: "Set it up once, never type a password again."
+
+cheatsheet:
+  - group:
+      ru: "Каждый день"
+      en: "Every day"
+    commands:
+      - cmd: git status
+        desc:
+          ru: "Что происходит в репозитории"
+          en: "What's going on in the repository"
+      - cmd: git add .
+        desc:
+          ru: "Положить все изменения в staging area"
+          en: "Stage all changes"
+      - cmd: git commit -m "сообщение"
+        desc:
+          ru: "Зафиксировать изменения"
+          en: "Record the changes"
+  - group:
+      ru: "Ветки"
+      en: "Branches"
+    commands:
+      - cmd: git switch -c feature
+        desc:
+          ru: "Создать ветку и сразу перейти в неё"
+          en: "Create a branch and switch to it"
+      - cmd: git merge feature
+        desc:
+          ru: "Влить ветку feature в текущую"
+          en: "Merge feature into the current branch"

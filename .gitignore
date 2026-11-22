@@ -221,3 +221,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- learn-git: фронтенд и локальный запуск ---------------------------------
+node_modules/
+frontend/dist/
+frontend/.smoke/out/
+frontend/.smoke/fixtures/
+frontend/.ssr/
+.venv/
+venv/
+*.log
+.DS_Store
