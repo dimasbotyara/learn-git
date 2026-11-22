@@ -8,12 +8,14 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 const STORAGE_KEY = 'learn-git:progress'
 const XP_PER_LESSON = 25
 const XP_PER_QUIZ = 10
+const XP_PER_TASK = 15
 
 const EMPTY = {
   version: 1,
   lessons: {}, // "module/lesson" -> { done: true, at: ISO }
   quizzes: {}, // stepId -> { correct: true, at }
   checklists: {}, // stepId -> [bool, ...]
+  terminals: {}, // stepId -> { solved: true, at } — задания тренажёра
   xp: 0,
   streak: { count: 0, last: null },
   updatedAt: null,
@@ -96,6 +98,21 @@ export function ProgressProvider({ children }) {
     [],
   )
 
+  /* Задание тренажёра решено. XP начисляется один раз: повторное решение после
+     «Сбросить» уже ничего не добавляет. */
+  const recordTask = useCallback((id) => {
+    if (!id) return
+    setState((current) => {
+      if (current.terminals[id]?.solved) return current
+      return touchStreak({
+        ...current,
+        terminals: { ...current.terminals, [id]: { solved: true, at: new Date().toISOString() } },
+        xp: current.xp + XP_PER_TASK,
+        updatedAt: new Date().toISOString(),
+      })
+    })
+  }, [touchStreak])
+
   const setChecklist = useCallback((id, values) => {
     if (!id) return
     setState((current) => ({ ...current, checklists: { ...current.checklists, [id]: values } }))
@@ -119,6 +136,9 @@ export function ProgressProvider({ children }) {
       uncompleteLesson,
       recordQuiz,
       quizResult: (id) => state.quizzes[id] || null,
+      recordTask,
+      isTaskSolved: (id) => Boolean(state.terminals?.[id]?.solved),
+      solvedTasks: Object.values(state.terminals || {}).filter((task) => task?.solved).length,
       setChecklist,
       checklist: (id) => state.checklists[id] || [],
       resetProgress,
@@ -126,7 +146,7 @@ export function ProgressProvider({ children }) {
       xp: state.xp,
       streak: state.streak,
     }
-  }, [state, completeLesson, uncompleteLesson, recordQuiz, setChecklist, resetProgress, importProgress])
+  }, [state, completeLesson, uncompleteLesson, recordQuiz, recordTask, setChecklist, resetProgress, importProgress])
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
 }
@@ -137,4 +157,4 @@ export function useProgress() {
   return context
 }
 
-export { XP_PER_LESSON, XP_PER_QUIZ }
+export { XP_PER_LESSON, XP_PER_QUIZ, XP_PER_TASK }

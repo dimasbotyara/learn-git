@@ -54,7 +54,7 @@
 |---|---|
 | 🎨 **10 тем + своя** | По умолчанию Gruvbox Dark. Ещё Catppuccin (Mocha / Macchiato / Frappé / Latte), Ayu (Dark / Mirage / Light), Gruvbox Light, Minimal Dark — и встроенный редактор, где из 20 цветов собирается собственная палитра. |
 | 🌐 **Два языка** | Русский и английский, автоопределение по браузеру, переключатель в хедере и в настройках. Уроки написаны дважды, а не прогнаны через переводчик. |
-| 📈 **Прогресс не теряется** | Пройденные уроки, XP и серия дней в `localStorage`, плюс экспорт/импорт JSON — чтобы чистка браузера не стёрла старания. |
+| 📈 **Прогресс не теряется** | Пройденные уроки, XP (25 за урок, 10 за квиз, 15 за задание), серия дней и счётчик решённых заданий в `localStorage`, плюс экспорт/импорт JSON — чтобы чистка браузера не стёрла старания. |
 | 🎉 **Приятные эффекты** | Конфетти, тосты и микроанимации. Уважают `prefers-reduced-motion` и отключаются одной кнопкой. |
 | 📱 **Сначала мобильные** | Drawer-навигация, липкая панель урока, тач-таргеты 44px, safe-area для iOS. |
 | 📴 **Работает офлайн** | Inter, JetBrains Mono, Noto Color Emoji, `highlight.js` и `canvas-confetti` ставятся из npm и попадают в сборку — в рантайме ноль запросов к CDN. |
@@ -81,6 +81,10 @@
     <td width="50%"><img src="docs/screenshots/ru-cheatsheet.png" alt="Шпаргалка"><br><sub><b>Шпаргалка</b> — все команды, клик копирует</sub></td>
     <td width="50%"><img src="docs/screenshots/ru-course.png" alt="Модули курса"><br><sub><b>Модули</b> — 5 штук, от базы до GitHub</sub></td>
   </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/ru-sandbox.png" alt="Песочница"><br><sub><b>Песочница</b> — тот же терминал, но без задания</sub></td>
+    <td width="50%"><img src="docs/screenshots/ru-gitignore.png" alt="Задание про .gitignore"><br><sub><b>Задание</b> — проверка по состоянию репозитория</sub></td>
+  </tr>
 </table>
 
 <p align="center">
@@ -104,8 +108,7 @@
 и практика в терминале (12 заданий на курс, от `git init` до `push` ветки с PR).
 
 **Все 11 уроков написаны на двух языках** — это 5 модулей, ~134 минуты чтения,
-28 команд в шпаргалке и 12 заданий в тренажёре. Что сделано и что дальше — в
-[`docs/PLAN.md`](docs/PLAN.md).
+28 команд в шпаргалке и 12 заданий в тренажёре.
 
 ### 🖥️ Терминал-тренажёр
 
@@ -170,10 +173,11 @@ frontend/src/
   sim/Terminal.jsx      # окно тренажёра
 scripts/
   start.sh              # сборка + запуск одной командой
-  smoke-router.mjs      # 28 проверок фронтенда в jsdom
+  smoke-router.mjs      # 42 проверки фронтенда в jsdom
+  check-tasks.mjs       # проверяет, что каждое задание в course.yaml решаемо
   make_banner.py        # генерирует SVG-баннеры (docs/banners) и бейджи (docs/badges)
 docs/
-  PLAN.md  banners/  screenshots/
+  banners/  screenshots/
 ```
 
 Один порт, один origin: Flask отдаёт и JSON API, и собранное React-приложение,

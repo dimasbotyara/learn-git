@@ -10,18 +10,27 @@ import { IconCheck } from './Icons'
 
 export function LessonSteps({ steps, onComplete }) {
   const { t } = useI18n()
-  const { recordQuiz } = useProgress()
+  const { recordQuiz, recordTask } = useProgress()
 
   return (
     <div className="lesson-steps">
       {steps.map((step, index) => (
-        <Step key={`${step.type}-${index}`} step={step} index={index} total={steps.length} onComplete={onComplete} recordQuiz={recordQuiz} t={t} />
+        <Step
+          key={`${step.type}-${index}`}
+          step={step}
+          index={index}
+          total={steps.length}
+          onComplete={onComplete}
+          recordQuiz={recordQuiz}
+          recordTask={recordTask}
+          t={t}
+        />
       ))}
     </div>
   )
 }
 
-function Step({ step, index, total, onComplete, recordQuiz, t }) {
+function Step({ step, index, total, onComplete, recordQuiz, recordTask, t }) {
   const label = (
     <div className="steps" aria-hidden="true">
       {Array.from({ length: total }).map((_, i) => (
@@ -64,7 +73,7 @@ function Step({ step, index, total, onComplete, recordQuiz, t }) {
     return (
       <article className="animate-in">
         {label}
-        <TerminalStep step={step} onComplete={onComplete} t={t} />
+        <TerminalStep step={step} onComplete={onComplete} recordTask={recordTask} t={t} />
       </article>
     )
   }
@@ -177,8 +186,9 @@ export function ChecklistStep({ step, onComplete, t }) {
   )
 }
 
-function TerminalStep({ step, onComplete, t }) {
-  const [solved, setSolved] = useState(false)
+function TerminalStep({ step, onComplete, recordTask, t }) {
+  const { isTaskSolved } = useProgress()
+  const [solved, setSolved] = useState(() => isTaskSolved(step.id))
 
   return (
     <div style={{ marginTop: 'var(--space-4)' }}>
@@ -197,6 +207,7 @@ function TerminalStep({ step, onComplete, t }) {
         label={step.id || '~/project'}
         onSolved={() => {
           setSolved(true)
+          recordTask?.(step.id)
           onComplete?.()
         }}
       />

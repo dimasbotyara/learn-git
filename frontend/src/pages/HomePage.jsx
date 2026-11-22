@@ -16,12 +16,16 @@ const FEATURES = [
 export function HomePage() {
   const { t, locale } = useI18n()
   const { data, loading, error } = useApi((signal) => api.course(locale, signal), [locale])
-  const { isLessonDone, doneKeys, xp } = useProgress()
+  const { isLessonDone, doneKeys, xp, solvedTasks } = useProgress()
 
   const modules = data?.modules || []
   const totalLessons = modules.reduce((sum, module) => sum + module.lessons.length, 0)
   const totalMinutes = modules.reduce(
     (sum, module) => sum + module.lessons.reduce((inner, lesson) => inner + (lesson.minutes || 0), 0),
+    0,
+  )
+  const totalTasks = modules.reduce(
+    (sum, module) => sum + module.lessons.reduce((inner, lesson) => inner + (lesson.tasks || 0), 0),
     0,
   )
   const firstLesson = modules[0]?.lessons[0]
@@ -65,6 +69,13 @@ export function HomePage() {
                 <div className="stat__value">{loading ? '—' : totalMinutes}</div>
                 <div className="stat__label">{t('home.stats.minutes')}</div>
               </div>
+              <div className="stat">
+                <div className="stat__value">
+                  {solvedTasks}
+                  {totalTasks > 0 && <span className="stat__of">/{totalTasks}</span>}
+                </div>
+                <div className="stat__label">{t('home.stats.tasks')}</div>
+              </div>
             </div>
           </div>
 
@@ -75,7 +86,7 @@ export function HomePage() {
                 <div>
                   <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{t('home.progress')}</div>
                   <div className="faint mono" style={{ fontSize: 'var(--text-xs)' }}>
-                    {doneKeys.length}/{totalLessons} · {xp} {t('common.xp')}
+                    {doneKeys.length}/{totalLessons} · {solvedTasks} {t('home.stats.tasksShort')} · {xp} {t('common.xp')}
                   </div>
                 </div>
               </div>

@@ -54,7 +54,7 @@ A little course site that answers the questions every beginner stumbles over:
 |---|---|
 | 🎨 **10 themes + your own** | Gruvbox Dark is the default. Catppuccin (Mocha / Macchiato / Frappé / Latte), Ayu (Dark / Mirage / Light), Gruvbox Light, Minimal Dark — plus a built-in editor that lets you build a custom palette from 20 colors and save it in your browser. |
 | 🌐 **Two languages** | Russian and English, auto-detected from the browser, switchable in the header and in Settings. Lessons are written twice, not machine-translated. |
-| 📈 **Progress that sticks** | Completed lessons, XP and a day streak in `localStorage`, with JSON export/import so a browser cleanup doesn't hurt. |
+| 📈 **Progress that sticks** | Completed lessons, XP (25 per lesson, 10 per quiz, 15 per solved task), a day streak and a solved-tasks counter in `localStorage`, with JSON export/import so a browser cleanup doesn't hurt. |
 | 🎉 **Delightful effects** | Confetti, toasts and micro-animations that respect `prefers-reduced-motion` and can be turned off. |
 | 📱 **Mobile first** | Drawer navigation, sticky lesson bar, 44px touch targets, safe-area padding for iOS. |
 | 📴 **Works offline** | Inter, JetBrains Mono, Noto Color Emoji, `highlight.js` and `canvas-confetti` are installed from npm and bundled — zero requests to a CDN at runtime. |
@@ -97,8 +97,7 @@ hands-on terminal practice (12 exercises across the course, from `git init` to p
 a branch and opening a PR).
 
 **All 11 lessons are written in both languages** — 5 modules, ~134 minutes of
-reading, 28 cheatsheet commands and 12 trainer exercises. Status and roadmap live in
-[`docs/PLAN.md`](docs/PLAN.md).
+reading, 28 cheatsheet commands and 12 trainer exercises.
 
 ### 🖥️ Terminal trainer
 
@@ -162,10 +161,11 @@ frontend/src/
   sim/Terminal.jsx      # the trainer window
 scripts/
   start.sh              # build + run in one command
-  smoke-router.mjs      # 28 frontend checks in jsdom
+  smoke-router.mjs      # 42 frontend checks in jsdom
+  check-tasks.mjs       # proves every task in course.yaml is solvable
   make_banner.py        # generates SVG banners (docs/banners) and badges (docs/badges)
 docs/
-  PLAN.md  banners/  screenshots/
+  banners/  screenshots/
 ```
 
 One port, one origin: Flask serves the JSON API **and** the built React app, so `/api` never

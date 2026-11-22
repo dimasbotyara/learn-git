@@ -94,3 +94,21 @@ def test_spa_fallback(client):
 def test_render_markdown_callout():
     html = render_markdown(":::tip Совет\nПривет\n:::")
     assert 'callout--tip' in html and "Совет" in html and "<p>Привет</p>" in html
+
+
+def test_course_counts_tasks_per_lesson(client):
+    course = client.get("/api/course?lang=ru").get_json()
+    total = 0
+    for module in course["modules"]:
+        for lesson in module["lessons"]:
+            assert isinstance(lesson["tasks"], int)
+            total += lesson["tasks"]
+    assert total == 12
+
+    lesson = next(
+        item
+        for module in course["modules"]
+        for item in module["lessons"]
+        if item["slug"] == "stash-reset-revert"
+    )
+    assert lesson["tasks"] == 2

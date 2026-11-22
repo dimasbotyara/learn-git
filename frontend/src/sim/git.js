@@ -202,7 +202,7 @@ const MSG = {
     ],
     helpShell: '  ls, cat, touch, echo "текст" > файл, clear',
     hintsTitle: 'Подсказки к этому заданию',
-    noHints: 'Для этого урока отдельных подсказок нет — только общий список выше.',
+    noHints: 'Отдельных подсказок здесь нет — только общий список выше.',
     readmeBody: '# My First Project\n\nУчебный репозиторий для практики Git.\n',
   },
   en: {
@@ -270,7 +270,7 @@ const MSG = {
     ],
     helpShell: '  ls, cat, touch, echo "text" > file, clear',
     hintsTitle: 'Hints for this task',
-    noHints: 'This lesson has no task-specific hints — only the general list above.',
+    noHints: 'No task-specific hints here — just the general list above.',
     readmeBody: '# My First Project\n\nPractice repository for the Git course.\n',
   },
 }

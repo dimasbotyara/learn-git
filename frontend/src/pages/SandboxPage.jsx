@@ -1,8 +1,11 @@
 import { useI18n } from '../i18n'
+import { Terminal } from '../sim/Terminal'
 import { CodeBlock } from '../components/CodeBlock'
 
-/* Песочница: пока это «свободный режим» с подсказками.
-   Полноценный виртуальный терминал появится на этапе практики (см. docs/PLAN.md). */
+/*
+  Песочница: тот же движок, что и в уроках, но без задания и проверок.
+  Задания считают XP, а здесь человек просто играется — прогресс не трогаем.
+*/
 export function SandboxPage() {
   const { t } = useI18n()
 
@@ -11,21 +14,14 @@ export function SandboxPage() {
       <h1>{t('sandbox.title')}</h1>
       <p className="muted">{t('sandbox.lead')}</p>
 
-      <div className="banner">
-        <span aria-hidden="true">🚧</span>
-        <span>
-          {t('common.soon')}: виртуальный репозиторий с командами и проверкой состояния появится на этапе практики.
-          Пока потренируйся на мини-сценарии ниже.
-        </span>
-      </div>
+      <Terminal hints={[]} label={t('sandbox.label')} autoHeight />
 
-      <h2>Сценарий: первый коммит</h2>
+      <h2>{t('sandbox.recipeTitle')}</h2>
+      <p className="muted">{t('sandbox.recipeLead')}</p>
       <CodeBlock
         language="bash"
-        code={`mkdir play && cd play
-git init
+        code={`git init
 echo "hello" > notes.txt
-git status
 git add notes.txt
 git commit -m "docs: add notes"
 git log --oneline`}

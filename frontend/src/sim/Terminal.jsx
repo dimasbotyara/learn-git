@@ -74,9 +74,13 @@ export function Terminal({ task, hints = [], check, setup = [], label, onSolved,
       const verdict = evaluateCheck(simRef.current, check, [...history, command])
       if (verdict.passed && !solved) {
         setSolved(true)
-        push([{ tone: 'success', text: '' }, { tone: 'success', text: `✔ ${t('terminal.passed')}` }])
+        push([
+          { tone: 'success', text: '' },
+          { tone: 'success', text: `✔ ${t('terminal.passed')}` },
+          { tone: 'success', text: `  ${t('terminal.xpGained')}` },
+        ])
         fire('big')
-        toast(t('terminal.passed'), { tone: 'success' })
+        toast(`${t('terminal.passed')} ${t('terminal.xpGained')}`, { tone: 'success' })
         onSolved?.()
       } else if (!verdict.passed) {
         setAttempts((current) => current + 1)

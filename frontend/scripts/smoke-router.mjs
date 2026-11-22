@@ -225,6 +225,45 @@ check('терминал: задание засчитано', count('.task--done'
 check('терминал: плашка «решено»', text().includes('решено') || text().includes('Задание выполнено'))
 check('терминал: подсказки сворачиваются', count('.task__actions button') === 1)
 
+const progress = JSON.parse(localStorage.getItem('learn-git:progress') || '{}')
+check('терминал: XP за задание начислен', progress.terminals?.['branch-practice']?.solved === true)
+check('терминал: XP в общем счёте', progress.xp >= 15, `${progress.xp} XP`)
+const solvedXp = progress.xp
+
+/* Повторное решение после «Сбросить» не должно давать XP второй раз. */
+document.querySelector('.code__copy').click()
+await sleep(150)
+for (const command of ['git switch -c feature/notes', 'echo "x" > ideas.txt', 'git add .', 'git commit -m "feat: notes"', 'git switch main']) {
+  await runCmd(command)
+}
+await sleep(200)
+check(
+  'терминал: XP не начисляется повторно',
+  JSON.parse(localStorage.getItem('learn-git:progress')).xp === solvedXp,
+  `${JSON.parse(localStorage.getItem('learn-git:progress')).xp} XP`,
+)
+
+/* Песочница: тот же терминал, но без задания и без XP. */
+const xpAfterTasks = JSON.parse(localStorage.getItem('learn-git:progress') || '{}').xp
+rerender('/sandbox')
+await sleep(350)
+check('песочница: терминал есть', count('.terminal') === 1 && count('.term__input') === 1)
+check('песочница: без блока задания', count('.task') === 0)
+await runCmd('git init')
+await runCmd('echo "hi" > a.txt')
+await runCmd('git add .')
+await runCmd('git commit -m "docs: hello"')
+check('песочница: команды работают', text().includes('docs: hello'))
+check(
+  'песочница: XP не начисляется',
+  JSON.parse(localStorage.getItem('learn-git:progress') || '{}').xp === xpAfterTasks,
+  `${JSON.parse(localStorage.getItem('learn-git:progress') || '{}').xp} XP`,
+)
+check(
+  'песочница: прогресс не тронут',
+  !JSON.parse(localStorage.getItem('learn-git:progress') || '{}').terminals?.['sandbox'],
+)
+
 rerender('/nope')
 await sleep(200)
 check('404 страница', text().includes('404'))

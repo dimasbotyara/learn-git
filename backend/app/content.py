@@ -200,6 +200,7 @@ class Course:
                             "summary": self.localize(lesson.get("summary"), locale),
                             "minutes": lesson.get("minutes", 5),
                             "steps": len(self._steps_meta(lesson)),
+                            "tasks": sum(1 for step in self._steps_meta(lesson) if step.get("type") == "terminal"),
                             "available": self.lesson_available(module["slug"], lesson),
                         }
                         for lesson in module["lessons"]
