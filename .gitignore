@@ -227,6 +227,7 @@ node_modules/
 frontend/dist/
 frontend/.smoke/out/
 frontend/.smoke/fixtures/
+frontend/fixtures/
 frontend/.ssr/
 .venv/
 venv/
